@@ -12,18 +12,38 @@ datasource db {
 }
 
 model Product {
-  id          String  @id @default(uuid())
-  name        String  @unique
+  id          String @id @default(uuid())
+  name        String @unique
   description String
   price       Int
+  sold        Int    @default(0)
+  stock_level Int    @default(10)
+
   Order       Order[]
+  Transaction Transaction[]
 }
 
 model Order {
-  id         String  @id @default(uuid())
-  discount   Int
-  product_id String
-  product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  id          String        @id @default(uuid())
+  discount    Int           @default(0)
+  quantity    Int           @default(1)
+  product_id  String
+  product     Product       @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  Transaction Transaction[]
 
+  @@index([product_id])
+}
+
+model Transaction {
+  id         String   @id @default(uuid())
+  date       DateTime @default(now())
+  quantity   Int
+  order_id   String
+  product_id String
+
+  order   Order   @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@index([order_id])
   @@index([product_id])
 }

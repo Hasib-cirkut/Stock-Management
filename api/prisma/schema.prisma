@@ -6,14 +6,24 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL_LOCAL")
   relationMode = "prisma"
 }
 
-model Product{
-  id String @default(uuid()) @id
-  name String @unique
+model Product {
+  id          String  @id @default(uuid())
+  name        String  @unique
   description String
-  price Int
+  price       Int
+  Order       Order[]
+}
+
+model Order {
+  id         String  @id @default(uuid())
+  discount   Int
+  product_id String
+  product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@index([product_id])
 }

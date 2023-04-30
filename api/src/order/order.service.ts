@@ -8,8 +8,10 @@ import { PrismaService } from 'src/prisma.service';
 export class OrderService {
   constructor(private prisma: PrismaService) {}
 
-  create(createOrderDto: CreateOrderDto) {
-    return 'This action adds a new order';
+  create(data: CreateOrderDto) {
+    return this.prisma.order.create({
+      data,
+    });
   }
 
   findAll(): Promise<Order[]> {

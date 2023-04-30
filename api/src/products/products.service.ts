@@ -8,9 +8,9 @@ import { Product } from '@prisma/client';
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
-  create(body: CreateProductDto) {
+  create(data: CreateProductDto) {
     return this.prisma.product.create({
-      data: body,
+      data,
     });
   }
 
